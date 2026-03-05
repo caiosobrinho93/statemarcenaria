@@ -51,7 +51,7 @@
 
 <body>
     <div class="login-card">
-        <img src="../imgs/logo-stecks.png" alt="Stark" class="logo">
+        <img src="../imgs/logo-stecks.png" alt="Stecks" class="logo">
         <h2>Área Administrativa</h2>
         <div id="error" class="error-msg">Usuário ou senha incorretos.</div>
         <form id="login-form">
@@ -74,8 +74,8 @@
             const pass = document.getElementById('password').value;
 
             // Simple demo credentials
-            if (user === 'admin' && pass === 'stark2026') {
-                localStorage.setItem('stark_admin_session', 'active');
+            if (user === 'admin' && pass === 'stecks2026') {
+                localStorage.setItem('stecks_admin_session', 'active');
                 window.location.href = 'dashboard.html';
             } else {
                 document.getElementById('error').style.display = 'block';
