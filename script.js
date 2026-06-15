@@ -6,11 +6,15 @@ const navLinks = document.querySelectorAll('.n-link');
 if (mobileMenu && navLinksContainer) {
     mobileMenu.addEventListener('click', () => {
         navLinksContainer.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+        document.body.classList.toggle('menu-open');
     });
 
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             navLinksContainer.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            document.body.classList.remove('menu-open');
         });
     });
 }
