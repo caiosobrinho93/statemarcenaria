@@ -1557,7 +1557,7 @@ img {
     .floating-badge { right: 20px; bottom: 20px; }
     .projects-grid { display: flex; flex-direction: column; gap: 20px; }
     
-    /* Fullscreen Elegant Mobile Navigation */
+    /* Fullscreen Pure Black Mobile Navigation with Fade transitions */
     .nav-links {
         display: flex !important;
         flex-direction: column;
@@ -1568,15 +1568,13 @@ img {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(10, 8, 7, 0.98);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: #000000; /* Pure black overlay as requested */
         padding: 40px;
-        gap: 30px;
+        gap: 35px;
         z-index: 999;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         pointer-events: none;
     }
     
@@ -1588,29 +1586,27 @@ img {
 
     .nav-links .n-link {
         font-family: var(--font-head);
-        font-size: 2rem;
+        font-size: 2.2rem;
         font-weight: 700;
-        letter-spacing: 3px;
-        color: var(--text-muted);
-        transition: var(--transition-smooth);
-        transform: translateY(20px);
+        letter-spacing: 4px;
+        color: #888888;
+        transform: translateY(30px);
         opacity: 0;
+        transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
     }
 
+    /* Stagger fade-in when menu is active */
     .nav-links.active .n-link {
         transform: translateY(0);
         opacity: 1;
     }
 
-    /* Stagger transitions for menu links */
-    .nav-links.active .n-link:nth-child(1) { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s; }
-    .nav-links.active .n-link:nth-child(2) { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s; }
-    .nav-links.active .n-link:nth-child(3) { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s; }
-    .nav-links.active .n-link:nth-child(4) { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.25s; }
-    .nav-links.active .n-link:nth-child(5) { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s; }
+    .nav-links.active .n-link:nth-child(1) { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, color 0.3s ease; }
+    .nav-links.active .n-link:nth-child(2) { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.22s, opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.22s, color 0.3s ease; }
+    .nav-links.active .n-link:nth-child(3) { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.29s, opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.29s, color 0.3s ease; }
 
     .nav-links .n-link::after {
-        display: none; /* remove default underline */
+        display: none;
     }
 
     .nav-links .n-link:hover, .nav-links .n-link.active {
