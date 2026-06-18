@@ -1011,7 +1011,7 @@ section {
     border-color: rgba(234, 179, 8, 0.4) !important;
     background-color: var(--bg-card-hover);
     box-shadow: var(--shadow-card), 0 0 20px rgba(234, 179, 8, 0.12);
-    animation-play-state: paused;
+    
 }
 
 .step-marker {
@@ -1112,7 +1112,7 @@ section {
 
 .service-card {
     position: relative;
-    background-color: #0b0b0d;
+    background: linear-gradient(135deg, #111115 0%, #07070a 100%);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 20px;
     padding: 35px 25px;
@@ -1145,7 +1145,7 @@ section {
 .service-icon-tech {
     font-size: 2.8rem;
     color: var(--primary);
-    animation: iconPulseGlow 3s ease-in-out infinite;
+    
 }
 
 .service-card-body {
@@ -1175,123 +1175,6 @@ section {
     color: var(--text-secondary);
     line-height: 1.6;
     margin: 0;
-}
-
-/* Glowing Border effect (Infinite sweep, visible on mobile) */
-.service-card::before {
-    content: "";
-    position: absolute;
-    width: 150%;
-    height: 150%;
-    top: -25%;
-    left: -25%;
-    border-radius: 20px;
-    background: radial-gradient(circle at center, rgba(234, 179, 8, 0.1) 0%, rgba(234, 179, 8, 0.03) 40%, transparent 70%);
-    z-index: -1;
-    animation: borderGlowMove 12s linear infinite;
-    pointer-events: none;
-    transition: background 0.4s ease;
-}
-
-.service-card:hover::before {
-    background: radial-gradient(circle at center, rgba(234, 179, 8, 0.22) 0%, rgba(234, 179, 8, 0.06) 45%, transparent 70%);
-    animation-duration: 6s; /* Speeds up on hover */
-}
-
-.service-card::after {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    border-radius: 20px;
-    background: rgba(11, 11, 13, 0.94);
-    transition: all 0.4s ease-in-out;
-    z-index: -1;
-}
-
-/* Planet Glow behind heading (Breathing wobble, visible on mobile) */
-.service-card-title::after {
-    content: "";
-    top: -50px;
-    left: -50px;
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: rgba(234, 179, 8, 0.02);
-    box-shadow: 0px 0px 80px rgba(234, 179, 8, 0.12),
-                inset rgba(234, 179, 8, 0.15) 0px 0px 30px -10px;
-    transition: all 0.5s ease-in-out;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.6;
-    animation: planetWobble 8s ease-in-out infinite;
-}
-
-.service-card:hover .service-card-title::after {
-    background: rgba(234, 179, 8, 0.04);
-    box-shadow: 0px 0px 120px rgba(234, 179, 8, 0.3),
-                inset rgba(234, 179, 8, 0.3) 0px 0px 30px -5px;
-    opacity: 1;
-}
-
-/* Shooting Star inside card body (Infinite movement, visible on mobile) */
-.service-card-body::before {
-    content: "";
-    position: absolute;
-    top: -10%;
-    left: 110%;
-    width: 60px;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(234, 179, 8, 0.4), transparent);
-    transform: rotate(-45deg);
-    z-index: 1;
-    pointer-events: none;
-    animation: shootingStarMove 7s linear infinite;
-}
-
-.service-card:nth-child(2) .service-card-body::before { animation-delay: 2s; }
-.service-card:nth-child(3) .service-card-body::before { animation-delay: 4s; }
-.service-card:nth-child(4) .service-card-body::before { animation-delay: 1s; }
-
-/* Stars Background effect inside card */
-.service-card-title::before {
-    content: "";
-    position: absolute;
-    top: -100px;
-    left: -100px;
-    width: 2px;
-    height: 2px;
-    border-radius: 50%;
-    opacity: 0.6;
-    box-shadow: 80px 40px #fff, 140px 60px #fff, 30px 120px #fff,
-                180px 100px #fff, 90px 150px #fff, 120px 20px #fff;
-    z-index: -1;
-    transition: transform 1.5s ease;
-    animation: 2s glowing-stars linear alternate infinite;
-    animation-delay: 0s;
-}
-
-.service-card-desc::before {
-    content: "";
-    position: absolute;
-    top: -50px;
-    left: -50px;
-    width: 2px;
-    height: 2px;
-    border-radius: 50%;
-    opacity: 0.6;
-    box-shadow: 50px 180px #fff, 160px 140px #fff, 110px 220px #fff,
-                40px 240px #fff, 190px 260px #fff, 130px 170px #fff;
-    z-index: -1;
-    transition: transform 2s ease;
-    animation: 2s glowing-stars linear alternate infinite;
-    animation-delay: 0.6s;
-}
-
-.service-card:hover .service-card-title::before,
-.service-card:hover .service-card-desc::before {
-    filter: blur(1px);
-    transform: scale(1.05);
 }
 
 /* Action Button at the bottom */
@@ -1420,26 +1303,15 @@ section {
     -webkit-backdrop-filter: blur(10px);
     position: relative;
     overflow: hidden; /* Added to clip Uiverse waves */
-    animation: slowCardFloat 8s ease-in-out infinite alternate;
+    
 }
 
 .material-block:hover {
     transform: translateY(-12px) !important;
-    animation-play-state: paused;
+    
     border-color: rgba(234, 179, 8, 0.3);
     background: linear-gradient(135deg, #16161d 0%, #0b0b0f 100%);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
-}
-
-/* Staggered float animation delays for Materials grid */
-.materials-flex > div:nth-child(1) {
-    animation-delay: 0s;
-}
-.materials-flex > div:nth-child(2) {
-    animation-delay: -2.6s;
-}
-.materials-flex > div:nth-child(3) {
-    animation-delay: -5.2s;
 }
 
 .material-block h4 {
@@ -1456,57 +1328,6 @@ section {
     line-height: 1.6;
     position: relative; /* Keep on top of waves */
     z-index: 2;
-}
-
-/* Uiverse Waving Background for Material Block */
-.material-block .wave {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    opacity: 0.15;
-    left: 50%;
-    bottom: -450px;
-    margin-left: -300px;
-    background: linear-gradient(744deg, #eab308, #b45309 60%, #eab308);
-    border-radius: 43%;
-    z-index: 1;
-    pointer-events: none;
-    animation: wave 10s infinite linear;
-    transition: bottom 0.5s ease, opacity 0.5s ease;
-}
-
-.material-block .wave:nth-child(2) {
-    animation-duration: 13s;
-    opacity: 0.1;
-    bottom: -430px;
-    border-radius: 40%;
-    left: 45%;
-}
-
-.material-block .wave:nth-child(3) {
-    animation-duration: 16s;
-    opacity: 0.05;
-    bottom: -410px;
-    border-radius: 45%;
-    left: 55%;
-}
-
-.material-block:hover .wave {
-    bottom: -410px;
-    opacity: 0.25;
-    animation-duration: 6s;
-}
-
-.material-block:hover .wave:nth-child(2) {
-    bottom: -390px;
-    opacity: 0.18;
-    animation-duration: 8s;
-}
-
-.material-block:hover .wave:nth-child(3) {
-    bottom: -370px;
-    opacity: 0.1;
-    animation-duration: 10s;
 }
 
 @media (max-width: 900px) {
@@ -1542,12 +1363,12 @@ section {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     position: relative;
-    animation: slowCardFloat 8s ease-in-out infinite alternate;
+    
 }
 
 .reason-card:hover {
     transform: translateY(-12px) !important;
-    animation-play-state: paused;
+    
     border-color: rgba(234, 179, 8, 0.3);
     background: linear-gradient(135deg, #16161d 0%, #0b0b0f 100%);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
@@ -1575,24 +1396,13 @@ section {
     overflow: hidden;
     border: 1px solid var(--border);
     min-height: 350px;
-    animation: slowCardFloat 8s ease-in-out infinite alternate;
+    
     transition: var(--transition);
 }
 
 .reason-image-card:hover {
     transform: translateY(-12px) !important;
-    animation-play-state: paused;
-}
-
-/* Staggered animation delays for Why Custom Section grid */
-.why-custom-grid > div:nth-child(1) {
-    animation-delay: 0s;
-}
-.why-custom-grid > div:nth-child(2) {
-    animation-delay: -2.6s;
-}
-.why-custom-grid > div:nth-child(3) {
-    animation-delay: -5.2s;
+    
 }
 
 .reason-image-card img {
@@ -1605,7 +1415,7 @@ section {
 }
 
 .reason-image-card:hover img {
-    animation-play-state: paused;
+    
     transform: scale(1.06);
     filter: brightness(0.8);
 }
@@ -1705,7 +1515,7 @@ section {
 .gallery-item:hover img {
     transform: scale(1.06) !important;
     filter: brightness(0.85);
-    animation-play-state: paused;
+    
 }
 
 .gallery-overlay {
@@ -2346,11 +2156,11 @@ section {
 
 /* --- Premium Floating Animations for Service Cards (No waves) --- */
 .service-card {
-    animation: slowCardFloat 8s ease-in-out infinite alternate;
+    
 }
 
 .service-card:hover {
-    animation-play-state: paused;
+    
 }
 
 .services-grid-2x2 > div:nth-child(1) { animation-delay: 0s; }
