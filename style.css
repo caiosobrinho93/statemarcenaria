@@ -710,14 +710,14 @@ h1, h2, h3, h4, h5, h6 {
 .fb-top-left {
     top: 12%;
     left: -8%;
-    animation: badgeTeleport1 16s ease-in-out infinite;
+    
 }
 
 .fb-bottom-right {
     bottom: 12%;
     right: -8%;
-    animation: badgeTeleport2 16s ease-in-out infinite;
-    animation-delay: -8s;
+    
+    
 }
 
 @keyframes smoothFloat1 {

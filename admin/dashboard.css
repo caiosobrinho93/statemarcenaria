@@ -173,7 +173,7 @@ body {
 }
 
 .card {
-    background: var(--bg-surface);
+    background: linear-gradient(135deg, #16161d 0%, #0b0b0f 100%);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 24px;
@@ -186,7 +186,7 @@ body {
 .card:hover {
     border-color: var(--border-hover);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 168, 255, 0.05);
-    background-color: var(--bg-surface-light);
+    background: linear-gradient(135deg, #1c1c24 0%, #111115 100%);
 }
 
 /* Stat Cards */
