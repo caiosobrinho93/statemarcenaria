@@ -33,7 +33,6 @@ const DB = {
         if (session !== 'active' || !user) {
             localStorage.removeItem('state_admin_session');
             localStorage.removeItem('state_current_user');
-            sessionStorage.removeItem('clubstate_session');
             window.location.href = 'login.html';
         }
     },
@@ -71,7 +70,7 @@ function notify(msg, type = 'success') {
     if(!container) return;
     const toast = document.createElement('div');
     toast.className = 'toast';
-    toast.style.cssText = `background:#161311; border-left:4px solid ${type === 'success' ? '#EAB308' : '#ff4d4d'}; padding:16px 24px; color:#F0EBE1; margin-bottom:10px; border-radius:4px; box-shadow:0 10px 40px rgba(0,0,0,0.8); font-size:0.9rem; z-index:9999; animation: slideIn 0.3s ease; transition:0.5s;`;
+    toast.style.cssText = `background:#161311; border-left:4px solid ${type === 'success' ? '#00A8FF' : '#ff4d4d'}; padding:16px 24px; color:#F0EBE1; margin-bottom:10px; border-radius:4px; box-shadow:0 10px 40px rgba(0,0,0,0.8); font-size:0.9rem; z-index:9999; animation: slideIn 0.3s ease; transition:0.5s;`;
     toast.innerHTML = `<strong>INFO:</strong> ${msg}`;
     container.appendChild(toast);
     setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 4000);
@@ -171,9 +170,10 @@ function renderClients(filter = '') {
     tbody.innerHTML = filtered.map(c => `
         <tr onclick="window.openClientDetail('${c.id}')" style="cursor:pointer;">
             <td>
-                <div style="display:flex; align-items:center; gap:12px">
+                <div style="display:flex; align-items:center; gap:12px; width:100%;">
                     <div class="avatar" style="width:40px; height:40px;">${c.photo ? `<img src="${c.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">` : c.name[0]}</div>
                     <strong style="color:var(--text-primary); text-transform:uppercase;">${c.name}</strong>
+                    ${c.salesperson ? `<span style="font-family:var(--font-mono); font-size:0.7rem; background:rgba(0,168,255,0.1); color:var(--brand-yellow); padding:3px 8px; border-radius:4px; border:1px solid var(--border-yellow); font-weight:700; margin-left:auto; text-transform:uppercase;">${c.salesperson}</span>` : ''}
                 </div>
             </td>
         </tr>
@@ -222,6 +222,7 @@ function openClientDetail(id) {
     document.getElementById('det-client-name').innerText = c.name.toUpperCase();
     document.getElementById('det-client-phone').innerText = c.phone || 'Não informado';
     document.getElementById('det-client-insta').innerText = c.insta || 'Não informado';
+    document.getElementById('det-client-salesperson').innerText = c.salesperson ? c.salesperson.toUpperCase() : 'Não informado';
     const photo = document.getElementById('det-client-photo');
     if(photo) { photo.src = c.photo || ''; photo.style.display = c.photo ? 'block' : 'none'; }
     const wa = document.getElementById('btn-wa-client');
@@ -280,6 +281,7 @@ function editClientFromDetail() {
         document.getElementById('client-name').value = c.name;
         document.getElementById('client-phone').value = c.phone || '';
         document.getElementById('client-instagram').value = c.insta || '';
+        document.getElementById('client-salesperson').value = c.salesperson || '';
         document.getElementById('client-address').value = c.address || '';
         const preview = document.getElementById('photo-preview');
         if(preview && c.photo) preview.innerHTML = `<img src="${c.photo}" style="width:100%; height:100%; object-fit:cover;">`;
@@ -656,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Form Event Listeners (Restored)
     const formsToHandle = [
-        { id: 'client-form-el', table: 'clients', fields: ['id','name','phone','insta','address','photo'], refresh: 'clients' },
+        { id: 'client-form-el', table: 'clients', fields: ['id','name','phone','insta','address','photo','salesperson'], refresh: 'clients' },
         { id: 'project-form-el', table: 'projects', fields: ['id','title','client','status','deadline','progress'], refresh: 'projects' },
         { id: 'inventory-form-el', table: 'inventory', fields: ['id','name','qty','photo'], refresh: 'inventory' },
         { id: 'finance-form-el', table: 'finance', fields: ['id','desc','amount','type','status','date'], refresh: 'finance' },
@@ -705,6 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(f.id === 'client-form-el') {
                     data.photo = document.getElementById('photo-preview')?.querySelector('img')?.src || '';
                     data.insta = document.getElementById('client-instagram')?.value || '';
+                    data.salesperson = document.getElementById('client-salesperson')?.value.trim().toUpperCase() || '';
                 }
                 if(f.id === 'provider-form-el') {
                     data.photo = document.getElementById('prov-photo-preview')?.querySelector('img')?.src || '';
@@ -731,14 +734,5 @@ window.closeModal = closeModal;
 window.logout = () => { 
     localStorage.removeItem('state_admin_session'); 
     localStorage.removeItem('state_current_user');
-    sessionStorage.removeItem('clubstate_session');
     window.location.href='login.html'; 
-};
-window.goToClub = () => {
-    const user = localStorage.getItem('state_current_user');
-    if(user) {
-        sessionStorage.setItem('clubstate_session', 'active');
-        localStorage.setItem('clubstate_bridge_user', user);
-        window.location.href='../club/index.html';
-    }
 };

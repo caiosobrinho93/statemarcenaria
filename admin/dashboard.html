@@ -11,7 +11,7 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Styles -->
-    <link rel="stylesheet" href="dashboard.css?v=6.3.0">
+    <link rel="stylesheet" href="dashboard.css?v=202606176">
     <script>
         if (localStorage.getItem('state_admin_session') !== 'active') {
             window.location.href = 'login.html';
@@ -59,11 +59,8 @@
                     <h2 class="topbar-title" id="current-mod-name">VISÃO GERAL</h2>
                 </div>
                 
-                <div class="topbar-right"> <div id="vip-upsell-tag" style="display:none; color:var(--brand-yellow); font-size:0.6rem; font-weight:900; background:rgba(234,179,8,0.1); padding:4px 8px; border-radius:4px; margin-right:10px; cursor:pointer;" onclick="switchModule('profile')">SEJA VIP 💎</div>
+                <div class="topbar-right"> <div id="vip-upsell-tag" style="display:none; color:var(--brand-yellow); font-size:0.6rem; font-weight:900; background:rgba(0,168,255,0.1); padding:4px 8px; border-radius:4px; margin-right:10px; cursor:pointer;" onclick="switchModule('profile')">SEJA VIP 💎</div>
                     <span style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted);" class="hide-mobile" id="topbar-greeting">OPERADOR: <strong>ADMIN</strong></span>
-                    <button id="crown-vip-btn" class="btn-royal" onclick="goToClub()" title="Acessar clubSTATE VIP" style="width:50px; height:50px; font-size:1.6rem; margin-right:15px; background:linear-gradient(135deg, var(--brand-yellow), #000); border:1px solid var(--brand-yellow); box-shadow:0 0 15px var(--brand-yellow-glow); filter:drop-shadow(0 0 5px var(--brand-yellow)); animation: pulse 2s infinite;">
-                        <i class="fa-solid fa-crown"></i>
-                    </button>
                     <div id="notifications-trigger" style="position:relative; cursor:pointer; font-size:1.2rem; color:var(--text-muted); margin-right:10px; transition:color 0.3s; display:flex; align-items:center;">
                         <i class="fa-solid fa-bell" id="bell-icon" onmouseover="this.style.color='var(--brand-yellow)'" onmouseout="this.style.color=''"></i>
                         <span id="notif-badge" style="position:absolute; top:-5px; right:-8px; background:#ef4444; color:#fff; font-size:0.6rem; font-weight:bold; border-radius:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; display:none;"></span>
@@ -89,7 +86,7 @@
                     <div class="stats-grid" id="home-stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px; margin-bottom:30px;">
                         <!-- Receita -->
                         <div class="card stat-card" style="padding:20px; border-left:4px solid var(--brand-yellow); display:flex; align-items:center; gap:15px;">
-                            <div style="background:rgba(234,179,8,0.1); padding:15px; border-radius:50%; color:var(--brand-yellow); font-size:1.5rem;"><i class="fa-solid fa-wallet"></i></div>
+                            <div style="background:rgba(0,168,255,0.1); padding:15px; border-radius:50%; color:var(--brand-yellow); font-size:1.5rem;"><i class="fa-solid fa-wallet"></i></div>
                             <div><h3 style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">RECEITA TOTAL</h3><p id="stat-revenue" style="font-size:1.5rem; font-weight:800; color:#fff;">R$ 0,00</p></div>
                         </div>
                         
@@ -179,6 +176,10 @@
                                 <div class="group">
                                     <label>INSTAGRAM URL</label>
                                     <input type="text" id="client-instagram" placeholder="https://instagram.com/perfildocliente">
+                                </div>
+                                <div class="group">
+                                    <label>CÓDIGO DO VENDEDOR</label>
+                                    <input type="text" id="client-salesperson" placeholder="Ex: CIDO5510, MARA1400, LUCS2522" style="text-transform: uppercase;">
                                 </div>
                                 <div class="group" style="grid-column: 1 / -1;">
                                     <label>ENDEREÇO DA OBRA (PARA MAPS)</label>
@@ -501,7 +502,7 @@
                                 <input type="text" id="profile-email" disabled style="opacity:0.7">
                             </div>
                             <div class="group">
-                                <label>MINHA BIOGRAFIA (PÚBLICA NO CLUBSTATE)</label>
+                                <label>MINHA BIOGRAFIA</label>
                                 <textarea id="profile-bio" rows="3" placeholder="Fale sobre seus projetos e expertise..."></textarea>
                             </div>
                             <div class="group">
@@ -640,7 +641,7 @@
 
     <!-- PROJECT DETAIL MODAL -->
     <div id="modal-project-detail" class="modal-overlay" style="display:none; backdrop-filter:blur(10px); background:rgba(0,0,0,0.8);">
-        <div class="card" style="width:100%; max-width:650px; max-height:90vh; overflow-y:auto; position:relative; background:linear-gradient(145deg, rgba(20,20,18,0.95), rgba(5,5,5,0.98)); backdrop-filter:blur(30px); border:1px solid rgba(234, 179, 8, 0.4); box-shadow:0 0 50px rgba(234,179,8,0.15), inset 0 0 20px rgba(234,179,8,0.05); border-radius:24px; padding:35px;">
+        <div class="card" style="width:100%; max-width:650px; max-height:90vh; overflow-y:auto; position:relative; background:linear-gradient(145deg, rgba(20,20,20,0.95), rgba(5,5,5,0.98)); backdrop-filter:blur(30px); border:1px solid rgba(0, 168, 255, 0.4); box-shadow:0 0 50px rgba(0, 168, 255, 0.15), inset 0 0 20px rgba(0, 168, 255, 0.05); border-radius:24px; padding:35px;">
             <div style="position:absolute; top:0; left:0; width:100%; height:4px; background:linear-gradient(90deg, transparent, var(--brand-yellow), transparent);"></div>
             <button onclick="closeModal('modal-project-detail')" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; color:#fff; cursor:pointer; font-size:1.1rem; transition:0.3s;"><i class="fa-solid fa-times"></i></button>
             <h3 style="color:var(--brand-yellow); margin-bottom:25px; font-family:var(--font-head); font-size:1.4rem; letter-spacing:1px; display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-list-check"></i> PROJETO OPERACIONAL</h3>
@@ -682,13 +683,13 @@
 
     <!-- CLIENT DETAIL MODAL -->
     <div id="modal-client-detail" class="modal-overlay" style="display:none; backdrop-filter:blur(10px); background:rgba(0,0,0,0.8);">
-        <div class="card" style="width:100%; max-width:420px; max-height:90vh; overflow-y:auto; position:relative; background:linear-gradient(145deg, rgba(20,20,18,0.95), rgba(5,5,5,0.98)); backdrop-filter:blur(30px); border:1px solid rgba(234, 179, 8, 0.4); box-shadow:0 0 50px rgba(234,179,8,0.15), inset 0 0 20px rgba(234,179,8,0.05); border-radius:24px; text-align:center; padding:35px;">
+        <div class="card" style="width:100%; max-width:420px; max-height:90vh; overflow-y:auto; position:relative; background:linear-gradient(145deg, rgba(20,20,20,0.95), rgba(5,5,5,0.98)); backdrop-filter:blur(30px); border:1px solid rgba(0, 168, 255, 0.4); box-shadow:0 0 50px rgba(0, 168, 255, 0.15), inset 0 0 20px rgba(0, 168, 255, 0.05); border-radius:24px; text-align:center; padding:35px;">
             <div style="position:absolute; top:0; left:0; width:100%; height:4px; background:linear-gradient(90deg, transparent, var(--brand-yellow), transparent);"></div>
             <button onclick="closeModal('modal-client-detail')" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; color:#fff; cursor:pointer; font-size:1.1rem; transition:0.3s;"><i class="fa-solid fa-times"></i></button>
             
             <div style="margin-top:20px; margin-bottom:20px; position:relative; display:inline-block;">
                 <img id="det-client-photo" src="" style="width:110px; height:110px; border-radius:50%; object-fit:cover; display:none; border:3px solid var(--brand-yellow); box-shadow:0 0 20px var(--brand-yellow-glow);">
-                <div id="det-client-photo-placeholder" style="width:110px; height:110px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(45deg, var(--brand-yellow), #856604); color:#000; font-size:3.5rem; font-weight:900; margin:0 auto; box-shadow:0 0 20px var(--brand-yellow-glow);">C</div>
+                <div id="det-client-photo-placeholder" style="width:110px; height:110px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(45deg, var(--brand-yellow), #003366); color:#fff; font-size:3.5rem; font-weight:900; margin:0 auto; box-shadow:0 0 20px var(--brand-yellow-glow);">C</div>
             </div>
             
             <h3 id="det-client-name" style="color:#fff; margin-bottom:5px; font-size:1.6rem; font-family:var(--font-head); font-weight:800; letter-spacing:-0.02em;">NOME DO CLIENTE</h3>
@@ -702,11 +703,18 @@
                         <span id="det-client-phone" style="color:#fff; font-size:1.05rem; font-weight:600;"></span>
                     </div>
                 </div>
-                <div style="display:flex; align-items:center; gap:15px;">
+                <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
                     <div style="width:36px; height:36px; border-radius:8px; background:rgba(255,255,255,0.05); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-size:1.1rem;"><i class="fa-brands fa-instagram"></i></div>
                     <div>
                         <span style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; display:block;">LINK DO INSTAGRAM</span>
                         <span id="det-client-insta" style="color:#fff; font-size:1.05rem; font-weight:600;"></span>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div style="width:36px; height:36px; border-radius:8px; background:rgba(255,255,255,0.05); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-size:1.1rem;"><i class="fa-solid fa-user-tag"></i></div>
+                    <div>
+                        <span style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; display:block;">VENDEDOR</span>
+                        <span id="det-client-salesperson" style="color:#fff; font-size:1.05rem; font-weight:600; font-family:var(--font-mono);"></span>
                     </div>
                 </div>
             </div>
@@ -723,13 +731,13 @@
 
     <!-- PROVIDER DETAIL MODAL -->
     <div id="modal-provider-detail" class="modal-overlay" style="display:none; backdrop-filter:blur(10px); background:rgba(0,0,0,0.8);">
-        <div class="card" style="width:100%; max-width:420px; max-height:90vh; overflow-y:auto; position:relative; background:linear-gradient(145deg, rgba(20,20,18,0.95), rgba(5,5,5,0.98)); backdrop-filter:blur(30px); border:1px solid rgba(234, 179, 8, 0.4); box-shadow:0 0 50px rgba(234,179,8,0.15), inset 0 0 20px rgba(234,179,8,0.05); border-radius:24px; text-align:center; padding:35px;">
+        <div class="card" style="width:100%; max-width:420px; max-height:90vh; overflow-y:auto; position:relative; background:linear-gradient(145deg, rgba(20,20,20,0.95), rgba(5,5,5,0.98)); backdrop-filter:blur(30px); border:1px solid rgba(0, 168, 255, 0.4); box-shadow:0 0 50px rgba(0, 168, 255, 0.15), inset 0 0 20px rgba(0, 168, 255, 0.05); border-radius:24px; text-align:center; padding:35px;">
             <div style="position:absolute; top:0; left:0; width:100%; height:4px; background:linear-gradient(90deg, transparent, var(--brand-yellow), transparent);"></div>
             <button onclick="closeModal('modal-provider-detail')" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; color:#fff; cursor:pointer; font-size:1.1rem; transition:0.3s;"><i class="fa-solid fa-times"></i></button>
             
             <div style="margin-top:20px; margin-bottom:20px; position:relative; display:inline-block;">
                 <img id="det-prov-photo" src="" style="width:110px; height:110px; border-radius:50%; object-fit:cover; display:none; border:3px solid var(--brand-yellow); box-shadow:0 0 20px var(--brand-yellow-glow);">
-                <div id="det-prov-photo-placeholder" style="width:110px; height:110px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(45deg, var(--brand-yellow), #856604); color:#000; font-size:3.5rem; font-weight:900; margin:0 auto; box-shadow:0 0 20px var(--brand-yellow-glow);">P</div>
+                <div id="det-prov-photo-placeholder" style="width:110px; height:110px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(45deg, var(--brand-yellow), #003366); color:#fff; font-size:3.5rem; font-weight:900; margin:0 auto; box-shadow:0 0 20px var(--brand-yellow-glow);">P</div>
             </div>
             
             <h3 id="det-prov-name" style="color:#fff; margin-bottom:5px; font-size:1.6rem; font-family:var(--font-head); font-weight:800; letter-spacing:-0.02em;">NOME DO PARCEIRO</h3>
@@ -758,6 +766,6 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
-    <script src="dashboard.js?v=6.5.1"></script>
+    <script src="dashboard.js?v=202606176"></script>
 </body>
 </html>
