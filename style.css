@@ -274,23 +274,17 @@ h1, h2, h3, h4, h5, h6 {
 
 /* --- Sticky Blur Navbar --- */
 .navbar-modern {
-    position: absolute; /* Starts inside flow but absolute in wrapper */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 90px;
     z-index: 100;
-    transition: var(--transition);
+    transition: background 0.3s ease, height 0.3s ease;
     border-bottom: 1px solid transparent;
 }
 
 .navbar-modern.scrolled {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: var(--container-max-width);
     background: rgba(24, 24, 24, 0.8);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -1411,7 +1405,7 @@ section {
     object-fit: cover;
     transition: var(--transition-slow);
     filter: brightness(0.65);
-    animation: imageBreathe 12s ease-in-out infinite alternate;
+    
 }
 
 .reason-image-card:hover img {
@@ -1499,7 +1493,7 @@ section {
     object-fit: cover;
     filter: brightness(0.7);
     transition: var(--transition-slow);
-    animation: imageBreathe 16s ease-in-out infinite alternate;
+    
 }
 
 .gallery-item:nth-child(2n) img {
@@ -4566,3 +4560,8 @@ section {
     100% { transform: scale(1.04); }
 }
 
+
+/* Filter logo yellow to match primary blue */
+img[src*="logo-state.png"] {
+    filter: hue-rotate(155deg) brightness(1.1) saturate(1.2) drop-shadow(0 0 5px rgba(0, 168, 255, 0.3));
+}
