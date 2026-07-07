@@ -159,30 +159,30 @@
                             <input type="hidden" id="client-id">
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
                                 <div class="group">
-                                    <label>FOTO / LOGO</label>
+                                    <label for="client-photo">FOTO / LOGO</label>
                                     <div id="photo-preview" style="width:100px; height:100px; border:1px dashed var(--border); margin-bottom:10px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
                                         <i class="fa-solid fa-image" style="opacity:0.2; font-size:2rem;"></i>
                                     </div>
                                     <input type="file" id="client-photo" accept="image/*" onchange="previewImage(this, 'photo-preview')">
                                 </div>
                                 <div class="group">
-                                    <label>NOME COMPLETO</label>
+                                    <label for="client-name">NOME COMPLETO</label>
                                     <input type="text" id="client-name" required>
                                 </div>
                                 <div class="group">
-                                    <label>WHATSAPP (COM DDD)</label>
+                                    <label for="client-phone">WHATSAPP (COM DDD)</label>
                                     <input type="tel" id="client-phone" required placeholder="17999887766">
                                 </div>
                                 <div class="group">
-                                    <label>INSTAGRAM URL</label>
+                                    <label for="client-instagram">INSTAGRAM URL</label>
                                     <input type="text" id="client-instagram" placeholder="https://instagram.com/perfildocliente">
                                 </div>
                                 <div class="group">
-                                    <label>CÓDIGO DO VENDEDOR</label>
+                                    <label for="client-salesperson">CÓDIGO DO VENDEDOR</label>
                                     <input type="text" id="client-salesperson" placeholder="Ex: CIDO5510, MARA1400, LUCS2522" style="text-transform: uppercase;">
                                 </div>
                                 <div class="group" style="grid-column: 1 / -1;">
-                                    <label>ENDEREÇO DA OBRA (PARA MAPS)</label>
+                                    <label for="client-address">ENDEREÇO DA OBRA (PARA MAPS)</label>
                                     <input type="text" id="client-address" placeholder="Rua, Número, Bairro, Cidade">
                                 </div>
                             </div>
@@ -231,19 +231,19 @@
                             <input type="hidden" id="project-id">
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
                                 <div class="group" style="grid-column: 1 / -1;">
-                                    <label>TÍTULO DO SISTEMA MOVELEIRO</label>
+                                    <label for="project-title">TÍTULO DO SISTEMA MOVELEIRO</label>
                                     <input type="text" id="project-title" required placeholder="Cozinha Gourmet Linear">
                                 </div>
                                 <div class="group">
-                                    <label>VINCULAR CLIENTE</label>
+                                    <label for="project-client-select">VINCULAR CLIENTE</label>
                                     <select id="project-client-select" required></select>
                                 </div>
                                 <div class="group">
-                                    <label>PARCEIRO RESPONSÁVEL</label>
+                                    <label for="project-provider-select">PARCEIRO RESPONSÁVEL</label>
                                     <select id="project-provider-select"></select>
                                 </div>
                                 <div class="group">
-                                    <label>STATUS OPERACIONAL</label>
+                                    <label for="project-status">STATUS OPERACIONAL</label>
                                     <select id="project-status">
                                         <option value="planejamento">PLANEJAMENTO</option>
                                         <option value="producao">PRODUÇÃO</option>
@@ -252,11 +252,11 @@
                                     </select>
                                 </div>
                                 <div class="group">
-                                    <label>PROGRESSO (%)</label>
+                                    <label for="project-progress">PROGRESSO (%)</label>
                                     <input type="number" id="project-progress" value="0" min="0" max="100">
                                 </div>
                                 <div class="group">
-                                    <label>DATA DE ENTREGA PROMETIDA</label>
+                                    <label for="project-deadline">DATA DE ENTREGA PROMETIDA</label>
                                     <input type="text" id="project-deadline" class="datepicker">
                                 </div>
                             </div>
@@ -298,18 +298,18 @@
                             <input type="hidden" id="item-id">
                             <div style="display: grid; gap: 20px;">
                                 <div class="group">
-                                    <label>FOTO DO PRODUTO</label>
+                                    <label for="item-photo">FOTO DO PRODUTO</label>
                                     <div id="item-photo-preview" style="width:100px; height:100px; border:1px dashed var(--border); margin-bottom:10px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
                                         <i class="fa-solid fa-box-open" style="opacity:0.2; font-size:2rem;"></i>
                                     </div>
                                     <input type="file" id="item-photo" accept="image/*" onchange="previewImage(this, 'item-photo-preview')">
                                 </div>
                                 <div class="group">
-                                    <label>ESPECIFICAÇÃO</label>
+                                    <label for="item-name">ESPECIFICAÇÃO</label>
                                     <input type="text" id="item-name" required placeholder="MDF Branco TX">
                                 </div>
                                 <div class="group">
-                                    <label>QTD ATUAL</label>
+                                    <label for="item-qty">QTD ATUAL</label>
                                     <input type="number" id="item-qty" required value="0">
                                 </div>
                             </div>
@@ -358,22 +358,22 @@
                             <input type="hidden" id="trans-id">
                             <div style="display: grid; gap: 20px;">
                                 <div class="group">
-                                    <label>OPERAÇÃO</label>
+                                    <label for="trans-type">OPERAÇÃO</label>
                                     <select id="trans-type">
                                         <option value="income">RECEBER (+)</option>
                                         <option value="expense">PAGAR (-)</option>
                                     </select>
                                 </div>
                                 <div class="group">
-                                    <label>MONTANTE (R$)</label>
+                                    <label for="trans-val">MONTANTE (R$)</label>
                                     <input type="text" id="trans-val" required placeholder="0,00" onkeyup="formatBRL(this)">
                                 </div>
                                 <div class="group">
-                                    <label>DESCRIÇÃO</label>
+                                    <label for="trans-desc">DESCRIÇÃO</label>
                                     <input type="text" id="trans-desc" required placeholder="Ex: Parcela 2/3 - Cozinha João">
                                 </div>
                                 <div class="group">
-                                    <label>VENCIMENTO</label>
+                                    <label for="trans-date">VENCIMENTO</label>
                                     <input type="text" id="trans-date" class="datepicker" required>
                                 </div>
                             </div>
@@ -405,22 +405,22 @@
                             <input type="hidden" id="prov-id">
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
                                 <div class="group">
-                                    <label>FOTO DO PARCEIRO</label>
+                                    <label for="prov-photo">FOTO DO PARCEIRO</label>
                                     <div id="prov-photo-preview" style="width:100px; height:100px; border:1px dashed var(--border); margin-bottom:10px; display:flex; align-items:center; justify-content:center; overflow:hidden;">
                                         <i class="fa-solid fa-users"></i>
                                     </div>
                                     <input type="file" id="prov-photo" accept="image/*" onchange="previewImage(this, 'prov-photo-preview')">
                                 </div>
                                 <div class="group">
-                                    <label>EMPRESA / PROFISSIONAL</label>
+                                    <label for="prov-name">EMPRESA / PROFISSIONAL</label>
                                     <input type="text" id="prov-name" required>
                                 </div>
                                 <div class="group">
-                                    <label>ESPECIALIDADE</label>
+                                    <label for="prov-skill">ESPECIALIDADE</label>
                                     <input type="text" id="prov-skill" required placeholder="Ex: Marmoraria">
                                 </div>
                                 <div class="group">
-                                    <label>WHATSAPP</label>
+                                    <label for="prov-phone">WHATSAPP</label>
                                     <input type="tel" id="prov-phone" placeholder="17999887766">
                                 </div>
                             </div>
@@ -462,15 +462,15 @@
                             <input type="hidden" id="gal-id">
                             <div style="display: grid; gap: 20px;">
                                 <div class="group">
-                                    <label>TÍTULO DO PROJETO</label>
+                                    <label for="gal-title">TÍTULO DO PROJETO</label>
                                     <input type="text" id="gal-title" required placeholder="Cozinha Executive">
                                 </div>
                                 <div class="group">
-                                    <label>SUBTÍTULO / DESCRIÇÃO</label>
+                                    <label for="gal-sub">SUBTÍTULO / DESCRIÇÃO</label>
                                     <input type="text" id="gal-sub" required placeholder="Linha Premium MDF">
                                 </div>
                                 <div class="group">
-                                    <label>UPLOAD DE IMAGEM</label>
+                                    <label for="gal-file">UPLOAD DE IMAGEM</label>
                                     <input type="file" id="gal-file" accept="image/*">
                                 </div>
                             </div>

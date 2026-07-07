@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/login.html
+Disallow: /admin/dashboard.html
+Disallow: /admin/dashboard.js
+Disallow: /admin/dashboard.css
+
+Sitemap: https://statemarcenaria.com.br/sitemap.xml

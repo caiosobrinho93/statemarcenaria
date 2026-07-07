@@ -21,33 +21,41 @@ if (mobileMenu && navLinksContainer) {
 
 // Navbar Scroll Effect
 const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-});
+if (navbar) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }, { passive: true });
+}
 
-// Active Link Highlight
+// Active Link Highlight using IntersectionObserver
 const sections = document.querySelectorAll('section');
+if (sections.length > 0 && navLinks.length > 0) {
+    const navObserverOptions = {
+        root: null,
+        rootMargin: '-20% 0px -60% 0px',
+        threshold: 0
+    };
 
-window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (pageYOffset >= (sectionTop - 200)) {
-            current = section.getAttribute('id');
-        }
-    });
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const currentId = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${currentId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, navObserverOptions);
 
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').includes(current)) {
-            link.classList.add('active');
-        }
-    });
-});
+    sections.forEach(section => navObserver.observe(section));
+}
 
 // Reveal Animations
 const observerOptions = {
@@ -104,8 +112,10 @@ if (consultationForm) {
     consultationForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const name = document.getElementById('client-name').value;
+        const projectSelect = document.getElementById('project-type-select');
+        const projectType = projectSelect ? projectSelect.value : 'Projeto Especial';
         const waPhone = '5517997448213';
-        const waText = `Olá, chamo-me ${name}. Gostaria de conversar sobre um projeto com a STATE MARCENARIA.`;
+        const waText = `Olá, meu nome é ${name}. Gostaria de conversar sobre um projeto de ${projectType} com a STATE MARCENARIA.`;
         const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(waText)}`;
         window.open(waUrl, '_blank');
         if (modal) {
@@ -163,7 +173,7 @@ function loadMainGallery() {
         div.className = masonryClass;
         div.style.transitionDelay = `${(index % 3) * 0.1}s`;
         div.innerHTML = `
-            <img src="${item.url}" alt="${item.title}" loading="lazy">
+            <img src="${item.url}" alt="${item.title}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='imgs/logo-state.png'; this.style.objectFit='contain'; this.style.padding='40px';">
             <div class="gallery-overlay">
                 <h4>${item.title}</h4>
                 <p>${item.desc}</p>
@@ -178,12 +188,19 @@ function loadMainGallery() {
 }
 
 // Lightbox logic
+const lightboxImg = document.getElementById('lightbox-img');
+if (lightboxImg) {
+    lightboxImg.addEventListener('click', () => {
+        lightboxImg.classList.toggle('zoomed');
+    });
+}
+
 function openLightbox(src, title, desc) {
     const lightbox = document.getElementById('gallery-lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCaption = document.getElementById('lightbox-caption');
 
     if (lightbox && lightboxImg && lightboxCaption) {
+        lightboxImg.classList.remove('zoomed');
         lightboxImg.src = src;
         lightboxImg.alt = title;
         lightboxCaption.innerHTML = `<strong>${title}</strong><small>${desc}</small>`;
@@ -195,19 +212,22 @@ const lightbox = document.getElementById('gallery-lightbox');
 const closeLightbox = document.querySelector('.close-lightbox');
 
 if (lightbox && closeLightbox) {
-    closeLightbox.addEventListener('click', () => {
+    const closeAction = () => {
         lightbox.classList.remove('show');
-    });
+        if (lightboxImg) lightboxImg.classList.remove('zoomed');
+    };
+
+    closeLightbox.addEventListener('click', closeAction);
 
     lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            lightbox.classList.remove('show');
+        if (e.target === lightbox || e.target.classList.contains('lightbox-content-wrapper')) {
+            closeAction();
         }
     });
 
     document.addEventListener('keydown', (e) => {
         if (e.key === "Escape" && lightbox.classList.contains('show')) {
-            lightbox.classList.remove('show');
+            closeAction();
         }
     });
 }

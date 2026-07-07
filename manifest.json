@@ -1,0 +1,18 @@
+{
+  "name": "State Marcenaria",
+  "short_name": "STATE",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#050507",
+  "theme_color": "#050507",
+  "description": "State Marcenaria — Móveis planejados sob medida com design exclusivo, qualidade premium e acabamento refinado.",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "imgs/logo-state.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

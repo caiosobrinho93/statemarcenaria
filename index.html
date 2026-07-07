@@ -5,20 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="State Marcenaria — Móveis planejados sob medida com design exclusivo, qualidade premium e acabamento refinado. Projetos personalizados para cozinhas, closets, dormitórios e escritórios em Votuporanga/SP.">
     <meta name="keywords" content="marcenaria planejada, móveis sob medida, marcenaria Votuporanga, cozinha planejada, closet planejado, State Marcenaria">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://statemarcenaria.com.br/">
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:title" content="State Marcenaria | Alta Engenharia Moveleira">
     <meta property="og:description" content="Projetos exclusivos de móveis planejados com design único, durabilidade e excelente acabamento.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://statemarcenaria.com.br">
+    <meta property="og:url" content="https://statemarcenaria.com.br/">
     <meta property="og:image" content="https://statemarcenaria.com.br/imgs/logo-state.png">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="State Marcenaria | Alta Engenharia Moveleira">
+    <meta name="twitter:description" content="Projetos exclusivos de móveis planejados com design único, durabilidade e excelente acabamento.">
+    <meta name="twitter:image" content="https://statemarcenaria.com.br/imgs/logo-state.png">
+
+    <!-- PWA & Theme -->
+    <meta name="theme-color" content="#050507">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Web App Appeyance -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="STATE Marcenaria">
+    <link rel="apple-touch-icon" href="imgs/logo-state.png">
+    
     <link rel="icon" type="image/png" href="imgs/logo-state.png">
     <title>State Marcenaria | Alta Engenharia Moveleira</title>
-    <!-- Google Fonts: Inter and JetBrains Mono -->
+    
+    <!-- Performance: DNS Prefetch & Preconnect -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    
+    <!-- Performance: Preload Largest Contentful Paint (LCP) Image -->
+    <link rel="preload" href="imgs/background.jpg" as="image" fetchpriority="high">
+    
+    <!-- Google Fonts: Inter, Outfit and JetBrains Mono -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=2026061717">
     <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FurnitureStore",
+      "name": "State Marcenaria",
+      "image": "https://statemarcenaria.com.br/imgs/logo-state.png",
+      "@id": "https://statemarcenaria.com.br/#organization",
+      "url": "https://statemarcenaria.com.br",
+      "telephone": "+5517997448213",
+      "priceRange": "$$$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Votuporanga",
+        "addressLocality": "Votuporanga",
+        "addressRegion": "SP",
+        "postalCode": "15500-000",
+        "addressCountry": "BR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -20.4201,
+        "longitude": -49.9724
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.instagram.com/statemarcenariavotu/"
+      ]
+    }
+    </script>
 </head>
 <body class="theme-dark">
 
@@ -38,7 +111,7 @@
                 <a href="#" class="nav-brand">
                     <img src="imgs/logo-state.png" alt="STATE MARCENARIA" class="nav-logo">
                 </a>
-                <div class="menu-toggle" id="mobile-menu">
+                <div class="menu-toggle" id="mobile-menu" role="button" tabindex="0" aria-label="Menu de navegação" aria-expanded="false">
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -559,10 +632,20 @@
             </div>
             <form id="consultation-form">
                 <div class="input-group">
-                    <label>SEU NOME</label>
+                    <label for="client-name">SEU NOME</label>
                     <input type="text" id="client-name" required placeholder="Seu nome completo">
                 </div>
-                <button type="submit" class="btn-tech-primary w-100">CONECTAR AO WHATSAPP <i class="fa-brands fa-whatsapp"></i></button>
+                <div class="input-group" style="margin-top: 20px;">
+                    <label for="project-type-select">AMBIENTE DE INTERESSE</label>
+                    <select id="project-type-select" style="width: 100%; height: 50px; background-color: var(--bg-card-hover); border: 1px solid var(--border); border-radius: var(--radius-input); padding: 0 16px; color: var(--text-primary); font-size: 1rem; outline: none; transition: var(--transition); appearance: none; -webkit-appearance: none; cursor: pointer;">
+                        <option value="Cozinha Gourmet" style="background: #121217; color: #fff;">Cozinha Planejada / Gourmet</option>
+                        <option value="Dormitório/Closet" style="background: #121217; color: #fff;">Quarto / Closet</option>
+                        <option value="Corporativo/Office" style="background: #121217; color: #fff;">Corporativo ou Home Office</option>
+                        <option value="Residência Completa" style="background: #121217; color: #fff;">Residência Completa (Alto Padrão)</option>
+                        <option value="Outro" style="background: #121217; color: #fff;">Outros Projetos Especiais</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-tech-primary w-100" style="margin-top: 25px;">CONECTAR AO WHATSAPP <i class="fa-brands fa-whatsapp"></i></button>
             </form>
         </div>
     </div>
@@ -582,6 +665,6 @@
     </a>
 
     <!-- Scripts -->
-    <script src="script.js?v=20260617"></script>
+    <script src="script.js?v=20260617" defer></script>
 </body>
 </html>

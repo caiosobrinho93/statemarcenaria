@@ -1,6 +1,7 @@
 /**
- * State Console V6.9 - FINAL STABILITY REBUILD
- * Reconstruído para corrigir navegação, salvamento de perfil sem reload e acesso ao Club.
+ * State Console V6.9 - EVOLVED STABILITY REBUILD
+ * Reconstruído para implementar o Repository Pattern, sanitização de inputs,
+ * e preparação total para futura migração ao Supabase com fluxo assíncrono.
  */
 
 const DB_PREFIX = 'state_db_';
@@ -18,7 +19,7 @@ const DB = {
         
         if (key === 'projects' || key === 'clients') {
             const groups = DB._getAll('groups', []);
-            const myGroups = groups.filter(g => g.members && g.members.includes(currentUser) || g.leader === currentUser).map(g => g.id);
+            const myGroups = groups.filter(g => (g.members && g.members.includes(currentUser)) || g.leader === currentUser).map(g => g.id);
             return all.filter(x => x.owner === currentUser || !x.owner || (x.groupId && myGroups.includes(x.groupId)));
         }
         if (['finance', 'gallery', 'providers', 'inventory'].includes(key)) {
@@ -57,6 +58,206 @@ const DB = {
     }
 };
 
+// --- Security & Sanitization ---
+const sanitizeHTML = (str) => {
+    if (typeof str !== 'string') return str;
+    return str.replace(/[&<>"']/g, (m) => {
+        switch (m) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            case "'": return '&#39;';
+            default: return m;
+        }
+    });
+};
+
+// --- Repository Pattern for Supabase Readiness ---
+const ClientRepository = {
+    async getAll(filter = '') {
+        const all = DB.get('clients');
+        if (!filter) return all;
+        return all.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
+    },
+    async getById(id) {
+        const all = DB.get('clients');
+        return all.find(c => c.id === id) || null;
+    },
+    async save(id, data) {
+        if (!data.name || data.name.trim() === '') {
+            throw new Error('O nome do cliente é obrigatório.');
+        }
+        const entity = {
+            id: id || 'CLI_' + Date.now(),
+            name: sanitizeHTML(data.name.trim()),
+            phone: data.phone ? data.phone.replace(/\D/g, '') : '',
+            insta: data.insta ? sanitizeHTML(data.insta.trim()) : '',
+            address: data.address ? sanitizeHTML(data.address.trim()) : '',
+            photo: data.photo || '',
+            salesperson: data.salesperson ? sanitizeHTML(data.salesperson.trim()).toUpperCase() : ''
+        };
+        DB.saveItem('clients', entity.id, entity);
+        return entity;
+    },
+    async delete(id) {
+        const all = DB._getAll('clients');
+        DB.set('clients', all.filter(x => x.id !== id));
+    }
+};
+
+const ProjectRepository = {
+    async getAll(filter = '') {
+        const all = DB.get('projects');
+        if (!filter) return all;
+        return all.filter(p => 
+            p.title.toLowerCase().includes(filter.toLowerCase()) || 
+            (p.client && p.client.toLowerCase().includes(filter.toLowerCase()))
+        );
+    },
+    async getById(id) {
+        const all = DB.get('projects');
+        return all.find(p => p.id === id) || null;
+    },
+    async save(id, data) {
+        if (!data.title || data.title.trim() === '') {
+            throw new Error('O título do projeto é obrigatório.');
+        }
+        const entity = {
+            id: id || 'PRJ_' + Date.now(),
+            title: sanitizeHTML(data.title.trim()),
+            client: sanitizeHTML(data.client || ''),
+            status: sanitizeHTML(data.status || 'planejamento'),
+            progress: Math.min(100, Math.max(0, parseInt(data.progress) || 0)),
+            deadline: sanitizeHTML(data.deadline || ''),
+            obs: sanitizeHTML(data.obs || ''),
+            images: data.images || []
+        };
+        DB.saveItem('projects', entity.id, entity);
+        return entity;
+    },
+    async delete(id) {
+        const all = DB._getAll('projects');
+        DB.set('projects', all.filter(x => x.id !== id));
+    }
+};
+
+const InventoryRepository = {
+    async getAll(filter = '') {
+        const all = DB.get('inventory');
+        if (!filter) return all;
+        return all.filter(i => i.name.toLowerCase().includes(filter.toLowerCase()));
+    },
+    async getById(id) {
+        const all = DB.get('inventory');
+        return all.find(i => i.id === id) || null;
+    },
+    async save(id, data) {
+        if (!data.name || data.name.trim() === '') {
+            throw new Error('A especificação do item é obrigatória.');
+        }
+        const entity = {
+            id: id || 'INV_' + Date.now(),
+            name: sanitizeHTML(data.name.trim()),
+            qty: Math.max(0, parseInt(data.qty) || 0),
+            photo: data.photo || ''
+        };
+        DB.saveItem('inventory', entity.id, entity);
+        return entity;
+    },
+    async delete(id) {
+        const all = DB._getAll('inventory');
+        DB.set('inventory', all.filter(x => x.id !== id));
+    }
+};
+
+const FinanceRepository = {
+    async getAll(filter = '') {
+        const all = DB.get('finance');
+        if (!filter) return all;
+        return all.filter(f => f.desc.toLowerCase().includes(filter.toLowerCase()));
+    },
+    async getById(id) {
+        const all = DB.get('finance');
+        return all.find(f => f.id === id) || null;
+    },
+    async save(id, data) {
+        if (!data.desc || data.desc.trim() === '') {
+            throw new Error('A descrição do lançamento é obrigatória.');
+        }
+        const entity = {
+            id: id || 'FIN_' + Date.now(),
+            desc: sanitizeHTML(data.desc.trim()),
+            amount: sanitizeHTML(data.amount || '0,00'),
+            type: sanitizeHTML(data.type || 'income'),
+            status: sanitizeHTML(data.status || 'pending'),
+            date: sanitizeHTML(data.date || '')
+        };
+        DB.saveItem('finance', entity.id, entity);
+        return entity;
+    },
+    async delete(id) {
+        const all = DB._getAll('finance');
+        DB.set('finance', all.filter(x => x.id !== id));
+    }
+};
+
+const ProviderRepository = {
+    async getAll() {
+        return DB.get('providers');
+    },
+    async getById(id) {
+        const all = DB.get('providers');
+        return all.find(p => p.id === id) || null;
+    },
+    async save(id, data) {
+        if (!data.name || data.name.trim() === '') {
+            throw new Error('O nome do parceiro é obrigatório.');
+        }
+        const entity = {
+            id: id || 'PROV_' + Date.now(),
+            name: sanitizeHTML(data.name.trim()),
+            service: sanitizeHTML(data.service || ''),
+            phone: data.phone ? data.phone.replace(/\D/g, '') : '',
+            rating: Math.min(5, Math.max(1, parseInt(data.rating) || 5)),
+            photo: data.photo || ''
+        };
+        DB.saveItem('providers', entity.id, entity);
+        return entity;
+    },
+    async delete(id) {
+        const all = DB._getAll('providers');
+        DB.set('providers', all.filter(x => x.id !== id));
+    }
+};
+
+const GalleryRepository = {
+    async getAll() {
+        return DB.get('gallery');
+    },
+    async getById(id) {
+        const all = DB.get('gallery');
+        return all.find(g => g.id === id) || null;
+    },
+    async save(id, data) {
+        if (!data.photo) {
+            throw new Error('A imagem é obrigatória.');
+        }
+        const entity = {
+            id: id || 'GAL_' + Date.now(),
+            title: sanitizeHTML(data.title || 'Projeto STATE'),
+            sub: sanitizeHTML(data.sub || 'Execução Especializada'),
+            photo: data.photo
+        };
+        DB.saveItem('gallery', entity.id, entity);
+        return entity;
+    },
+    async delete(id) {
+        const all = DB._getAll('gallery');
+        DB.set('gallery', all.filter(x => x.id !== id));
+    }
+};
+
 // --- Utilities ---
 const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -90,7 +291,7 @@ window.previewImage = previewImage;
 
 // --- Navigation ---
 let navLinks, sections;
-function switchModule(modId) {
+async function switchModule(modId) {
     if(!sections || !navLinks) {
         navLinks = document.querySelectorAll('.nav-link[data-mod]');
         sections = document.querySelectorAll('.module-section');
@@ -108,20 +309,20 @@ function switchModule(modId) {
         document.getElementById('current-mod-name').innerText = span.innerText.toUpperCase();
     }
 
-    if(modId === 'home') renderDashboardHome();
-    if(modId === 'clients') renderClients();
-    if(modId === 'projects') renderProjects();
-    if(modId === 'inventory') renderInventory();
-    if(modId === 'finance') renderFinance();
-    if(modId === 'providers') renderProviders();
-    if(modId === 'gallery') renderGallery();
+    if(modId === 'home') await renderDashboardHome();
+    if(modId === 'clients') await renderClients();
+    if(modId === 'projects') await renderProjects();
+    if(modId === 'inventory') await renderInventory();
+    if(modId === 'finance') await renderFinance();
+    if(modId === 'providers') await renderProviders();
+    if(modId === 'gallery') await renderGallery();
     if(modId === 'profile') loadProfile();
     if(modId === 'admsettings') renderAdminUsers();
 
     document.getElementById('sidebar')?.classList.remove('open');
 }
 
-function renderDashboardHome() {
+async function renderDashboardHome() {
     const revenueEl = document.getElementById('stat-revenue');
     const projectsEl = document.getElementById('stat-projects');
     const clientsEl = document.getElementById('stat-clients');
@@ -131,23 +332,23 @@ function renderDashboardHome() {
     
     if(!revenueEl) return;
 
-    const finance = DB.get('finance');
-    const totalRev = finance.filter(f => f.type === 'in' && f.status === 'paid').reduce((acc, curr) => acc + parseFloat(curr.amount || 0), 0);
-    const totalPending = finance.filter(f => f.type === 'in' && f.status !== 'paid').reduce((acc, curr) => acc + parseFloat(curr.amount || 0), 0);
+    const finance = await FinanceRepository.getAll();
+    const totalRev = finance.filter(f => f.type === 'income' && f.status === 'paid').reduce((acc, curr) => acc + parseFloat(curr.amount || 0), 0);
+    const totalPending = finance.filter(f => f.type === 'income' && f.status !== 'paid').reduce((acc, curr) => acc + parseFloat(curr.amount || 0), 0);
     
     revenueEl.innerText = totalRev.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     pendingEl.innerText = totalPending.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     
-    const projects = DB.get('projects');
+    const projects = await ProjectRepository.getAll();
     projectsEl.innerText = projects.filter(p => parseInt(p.progress) < 100).length;
 
-    const clients = DB.get('clients');
+    const clients = await ClientRepository.getAll();
     clientsEl.innerText = clients.length;
 
-    const inventory = DB.get('inventory');
+    const inventory = await InventoryRepository.getAll();
     inventoryEl.innerText = inventory.length;
 
-    const providers = DB.get('providers');
+    const providers = await ProviderRepository.getAll();
     providersEl.innerText = providers.length;
 }
 
@@ -162,12 +363,11 @@ function closeModal(id) {
 }
 
 // --- Handlers ---
-function renderClients(filter = '') {
-    const clients = DB.get('clients');
+async function renderClients(filter = '') {
+    const clients = await ClientRepository.getAll(filter);
     const tbody = document.querySelector('#table-clients tbody');
     if(!tbody) return;
-    const filtered = clients.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
-    tbody.innerHTML = filtered.map(c => `
+    tbody.innerHTML = clients.map(c => `
         <tr onclick="window.openClientDetail('${c.id}')" style="cursor:pointer;">
             <td>
                 <div style="display:flex; align-items:center; gap:12px; width:100%;">
@@ -180,12 +380,11 @@ function renderClients(filter = '') {
     `).join('');
 }
 
-function renderProjects(filter = '') {
-    const projects = DB.get('projects');
+async function renderProjects(filter = '') {
+    const projects = await ProjectRepository.getAll(filter);
     const tbody = document.querySelector('#table-projects tbody');
     if(!tbody) return;
-    const filtered = projects.filter(p => p.title.toLowerCase().includes(filter.toLowerCase()) || p.client.toLowerCase().includes(filter.toLowerCase()));
-    tbody.innerHTML = filtered.map(p => `
+    tbody.innerHTML = projects.map(p => `
         <tr onclick="window.openProjectDetail('${p.id}')" style="cursor:pointer;">
             <td>
                 <div style="display:flex; align-items:center; gap:16px">
@@ -199,9 +398,8 @@ function renderProjects(filter = '') {
     `).join('');
 }
 
-function openProjectDetail(id) {
-    const projects = DB.get('projects');
-    const p = projects.find(x => x.id === id);
+async function openProjectDetail(id) {
+    const p = await ProjectRepository.getById(id);
     if (!p) return;
     document.getElementById('det-project-id').value = p.id;
     document.getElementById('det-project-title').innerText = p.title.toUpperCase();
@@ -212,11 +410,9 @@ function openProjectDetail(id) {
     if(container) container.innerHTML = (p.images || []).map(img => `<div class="project-img-card"><img src="${img}" onclick="window.open('${img}')"></div>`).join('');
     openModal('modal-project-detail');
 }
-window.openProjectDetail = openProjectDetail;
 
-function openClientDetail(id) {
-    const clients = DB.get('clients');
-    const c = clients.find(x => x.id === id);
+async function openClientDetail(id) {
+    const c = await ClientRepository.getById(id);
     if (!c) return;
     document.getElementById('det-client-id').value = c.id;
     document.getElementById('det-client-name').innerText = c.name.toUpperCase();
@@ -229,25 +425,22 @@ function openClientDetail(id) {
     if(wa && c.phone) wa.onclick = () => window.open(`https://wa.me/55${c.phone.replace(/\D/g, '')}`);
     openModal('modal-client-detail');
 }
-window.openClientDetail = openClientDetail;
 
-function deleteProjectFromDetail() {
+async function deleteProjectFromDetail() {
     if(confirm('Tem certeza que deseja excluir o projeto?')) {
         const id = document.getElementById('det-project-id').value;
-        const all = DB._getAll('projects');
-        DB.set('projects', all.filter(x => x.id !== id));
+        await ProjectRepository.delete(id);
         closeModal('modal-project-detail');
-        renderProjects();
+        await renderProjects();
+        await renderDashboardHome();
         notify('Projeto excluído com sucesso.', 'success');
     }
 }
-window.deleteProjectFromDetail = deleteProjectFromDetail;
 
-function editProjectFromDetail() {
+async function editProjectFromDetail() {
     const id = document.getElementById('det-project-id').value;
     closeModal('modal-project-detail');
-    const projects = DB.get('projects');
-    const p = projects.find(x => x.id === id);
+    const p = await ProjectRepository.getById(id);
     if(p) {
         document.getElementById('project-id').value = p.id;
         document.getElementById('project-title').value = p.title;
@@ -257,25 +450,22 @@ function editProjectFromDetail() {
         switchModule('form-project');
     }
 }
-window.editProjectFromDetail = editProjectFromDetail;
 
-function deleteClientFromDetail() {
+async function deleteClientFromDetail() {
     if(confirm('Tem certeza que deseja excluir o cliente?')) {
         const id = document.getElementById('det-client-id').value;
-        const all = DB._getAll('clients');
-        DB.set('clients', all.filter(x => x.id !== id));
+        await ClientRepository.delete(id);
         closeModal('modal-client-detail');
-        renderClients();
+        await renderClients();
+        await renderDashboardHome();
         notify('Cliente excluído com sucesso.', 'success');
     }
 }
-window.deleteClientFromDetail = deleteClientFromDetail;
 
-function editClientFromDetail() {
+async function editClientFromDetail() {
     const id = document.getElementById('det-client-id').value;
     closeModal('modal-client-detail');
-    const clients = DB.get('clients');
-    const c = clients.find(x => x.id === id);
+    const c = await ClientRepository.getById(id);
     if(c) {
         document.getElementById('client-id').value = c.id;
         document.getElementById('client-name').value = c.name;
@@ -288,34 +478,30 @@ function editClientFromDetail() {
         switchModule('form-client');
     }
 }
-window.editClientFromDetail = editClientFromDetail;
-window.editClientFromDetail = editClientFromDetail;
 
-
-function renderInventory() {
-    const items = DB.get('inventory');
+async function renderInventory() {
+    const items = await InventoryRepository.getAll();
     const container = document.getElementById('inventory-list');
     if(!container) return;
     container.innerHTML = items.map(i => `
-        <div class="card" onclick="editInventoryItem('${i.id}')" style="cursor:pointer; border:1px solid rgba(255,255,255,0.05); transition:0.3s; padding:15px;">
+        <div class="card" onclick="window.editInventoryItem('${i.id}')" style="cursor:pointer; border:1px solid rgba(255,255,255,0.05); transition:0.3s; padding:15px;">
             <div style="height:120px; background:rgba(255,255,255,0.03); overflow:hidden; border-radius:8px; margin-bottom:12px; display:flex; align-items:center; justify-content:center;">
                 ${i.photo ? `<img src="${i.photo}" style="width:100%;height:100%;object-fit:cover">` : '<i class="fa-solid fa-box-open" style="font-size:2.5rem; opacity:0.1"></i>'}
-            </div>
+              </div>
             <strong style="color:var(--brand-yellow); text-transform:uppercase; font-size:0.85rem; display:block; margin-bottom:5px;">${(i.name || 'Sem Especificação').toUpperCase()}</strong>
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:0.75rem; opacity:0.5;">DISPONÍVEL:</span>
                 <b style="color:#fff; font-size:1rem;">${i.qty || 0}</b>
             </div>
             <div style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px; text-align:right;">
-                <button onclick="editInventoryItem('${i.id}')" style="background:transparent; border:none; color:var(--brand-yellow); font-size:0.75rem; cursor:pointer;"><i class="fa-solid fa-pen-to-square"></i> EDITAR</button>
+                <button onclick="window.editInventoryItem('${i.id}')" style="background:transparent; border:none; color:var(--brand-yellow); font-size:0.75rem; cursor:pointer;"><i class="fa-solid fa-pen-to-square"></i> EDITAR</button>
             </div>
         </div>
     `).join('') || '<p style="text-align:center; padding:40px; opacity:0.5; grid-column:1/-1;">Nenhum material cadastrado.</p>';
 }
 
-function editInventoryItem(id) {
-    const items = DB.get('inventory');
-    const i = items.find(x => x.id === id);
+async function editInventoryItem(id) {
+    const i = await InventoryRepository.getById(id);
     if(i) {
         document.getElementById('inventory-form-title').innerText = 'EDITAR MATERIAL';
         document.getElementById('item-id').value = i.id;
@@ -326,10 +512,9 @@ function editInventoryItem(id) {
         switchModule('form-inventory');
     }
 }
-window.editInventoryItem = editInventoryItem;
 
-function renderFinance() {
-    const data = DB.get('finance');
+async function renderFinance() {
+    const data = await FinanceRepository.getAll();
     const tbody = document.querySelector('#table-finance tbody');
     if(!tbody) return;
     tbody.innerHTML = data.map(f => {
@@ -338,7 +523,7 @@ function renderFinance() {
         const color = f.type === 'income' ? '#4ade80' : '#ef4444';
         const statusBtn = isPaid 
             ? `<span style="color:#10b981; font-size:0.75rem;"><i class="fa-solid fa-check-circle"></i> PAGO</span>`
-            : `<button onclick="toggleFinanceStatus('${f.id}')" class="btn btn-primary" style="padding:4px 8px; font-size:0.7rem;">MARCAR PAGO</button>`;
+            : `<button onclick="window.toggleFinanceStatus('${f.id}')" class="btn btn-primary" style="padding:4px 8px; font-size:0.7rem;">MARCAR PAGO</button>`;
             
         return `<tr>
             <td><strong style="color:${color}">${typeStr.toUpperCase()}</strong></td>
@@ -350,21 +535,19 @@ function renderFinance() {
     }).join('') || '<tr><td colspan="5" style="text-align:center; opacity:0.5; padding:20px;">Nenhum lançamento.</td></tr>';
 }
 
-function toggleFinanceStatus(id) {
-    const data = DB._getAll('finance');
-    const idx = data.findIndex(f => f.id === id);
-    if(idx > -1) {
-        data[idx].status = 'paid';
-        DB.set('finance', data);
-        renderFinance();
-        renderDashboardHome(); // refresh overall numbers
+async function toggleFinanceStatus(id) {
+    const item = await FinanceRepository.getById(id);
+    if(item) {
+        item.status = 'paid';
+        await FinanceRepository.save(id, item);
+        await renderFinance();
+        await renderDashboardHome();
         notify('Status alterado para Pago!', 'success');
     }
 }
-window.toggleFinanceStatus = toggleFinanceStatus;
 
-function renderProviders() {
-    const providers = DB.get('providers');
+async function renderProviders() {
+    const providers = await ProviderRepository.getAll();
     const container = document.getElementById('providers-grid');
     if(!container) return;
     container.innerHTML = providers.map(p => `
@@ -380,9 +563,8 @@ function renderProviders() {
     `).join('') || '<p style="text-align:center; padding:40px; opacity:0.5; grid-column:1/-1;">Nenhum parceiro cadastrado.</p>';
 }
 
-function openProviderDetail(id) {
-    const providers = DB.get('providers');
-    const p = providers.find(x => x.id === id);
+async function openProviderDetail(id) {
+    const p = await ProviderRepository.getById(id);
     if (!p) return;
     document.getElementById('det-prov-id').value = p.id;
     document.getElementById('det-prov-name').innerText = p.name.toUpperCase();
@@ -403,25 +585,22 @@ function openProviderDetail(id) {
     if(wa && p.phone) wa.onclick = () => window.open(`https://wa.me/55${p.phone.replace(/\D/g, '')}`);
     openModal('modal-provider-detail');
 }
-window.openProviderDetail = openProviderDetail;
 
-function deleteProviderFromDetail() {
+async function deleteProviderFromDetail() {
     if(confirm('Remover parceiro da sua rede?')) {
         const id = document.getElementById('det-prov-id').value;
-        const all = DB._getAll('providers');
-        DB.set('providers', all.filter(x => x.id !== id));
+        await ProviderRepository.delete(id);
         closeModal('modal-provider-detail');
-        renderProviders();
+        await renderProviders();
+        await renderDashboardHome();
         notify('Parceiro removido.');
     }
 }
-window.deleteProviderFromDetail = deleteProviderFromDetail;
 
-function editProviderFromDetail() {
+async function editProviderFromDetail() {
     const id = document.getElementById('det-prov-id').value;
     closeModal('modal-provider-detail');
-    const providers = DB.get('providers');
-    const p = providers.find(x => x.id === id);
+    const p = await ProviderRepository.getById(id);
     if(p) {
         document.getElementById('prov-id').value = p.id;
         document.getElementById('prov-name').value = p.name;
@@ -432,30 +611,27 @@ function editProviderFromDetail() {
         switchModule('form-provider');
     }
 }
-window.editProviderFromDetail = editProviderFromDetail;
 
-function renderGallery() {
-    const data = DB.get('gallery');
+async function renderGallery() {
+    const data = await GalleryRepository.getAll();
     const container = document.getElementById('gallery-list');
     if(!container) return;
     container.innerHTML = data.map(g => `
         <div class="card" style="padding:0; overflow:hidden; position:relative;">
-            <button onclick="deleteGalleryItem('${g.id}')" style="position:absolute; top:10px; right:10px; background:rgba(239,68,68,0.8); color:#fff; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer; z-index:10; font-size:0.7rem;"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="window.deleteGalleryItem('${g.id}')" style="position:absolute; top:10px; right:10px; background:rgba(239,68,68,0.8); color:#fff; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer; z-index:10; font-size:0.7rem;"><i class="fa-solid fa-trash"></i></button>
             <img src="${g.photo}" style="width:100%; height:200px; object-fit:cover;">
             <div style="padding:15px;"><strong style="color:var(--brand-yellow);">${g.title.toUpperCase()}</strong></div>
         </div>
     `).join('') || '<p style="text-align:center; padding:40px; opacity:0.5; grid-column:1/-1;">Galeria vazia.</p>';
 }
 
-function deleteGalleryItem(id) {
+async function deleteGalleryItem(id) {
     if(confirm('Excluir esta imagem permanentemente?')) {
-        const data = DB._getAll('gallery');
-        DB.set('gallery', data.filter(x => x.id !== id));
-        renderGallery();
+        await GalleryRepository.delete(id);
+        await renderGallery();
         notify('Imagem removida.');
     }
 }
-window.deleteGalleryItem = deleteGalleryItem;
 
 function updateTopbarProfile() {
     const user = localStorage.getItem('state_current_user') || 'admin';
@@ -629,7 +805,7 @@ function sendMessage() {
         id: Date.now(),
         from: currentUser,
         to: currentChatPartner,
-        text: text,
+        text: sanitizeHTML(text),
         timeMs: Date.now()
     });
     DB.set('social_chats', chats);
@@ -639,7 +815,7 @@ function sendMessage() {
 window.sendMessage = sendMessage;
 
 // --- Initialization ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     DB.checkSession();
     updateTopbarProfile();
     
@@ -649,14 +825,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if(adOnly) adOnly.style.display = 'block';
     }
 
-    switchModule('home');
+    await switchModule('home');
 
-    document.getElementById('menu-toggle').onclick = () => document.getElementById('sidebar').classList.toggle('open');
+    const toggleBtn = document.getElementById('menu-toggle');
+    if (toggleBtn) {
+        toggleBtn.onclick = () => document.getElementById('sidebar').classList.toggle('open');
+    }
     
     navLinks = document.querySelectorAll('.nav-link[data-mod]');
     navLinks.forEach(l => l.onclick = () => switchModule(l.dataset.mod));
 
-    // Form Event Listeners (Restored)
+    // Form Event Listeners (Restored & Evolved with Repositories)
     const formsToHandle = [
         { id: 'client-form-el', table: 'clients', fields: ['id','name','phone','insta','address','photo','salesperson'], refresh: 'clients' },
         { id: 'project-form-el', table: 'projects', fields: ['id','title','client','status','deadline','progress'], refresh: 'projects' },
@@ -668,12 +847,12 @@ document.addEventListener('DOMContentLoaded', () => {
     formsToHandle.forEach(f => {
         const el = document.getElementById(f.id);
         if(el) {
-            el.onsubmit = (e) => {
+            el.onsubmit = async (e) => {
                 e.preventDefault();
                 const data = {};
                 const formPrefix = f.id.split('-')[0];
+                
                 f.fields.forEach(field => {
-                    // Try different prefixes to find the input element
                     const inp = document.getElementById(`${formPrefix}-${field}`) || 
                                 document.getElementById(`${f.table.replace(/s$/,'')}-${field}`) || 
                                 document.getElementById(`item-${field}`) ||
@@ -700,7 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(!data.rating) data.rating = 5;
                 }
                 
-                // Photo fallbacks from previews (since file inputs don't return Base64)
+                // Photo fallbacks from previews
                 if(f.id === 'inventory-form-el') {
                     data.photo = document.getElementById('item-photo-preview')?.querySelector('img')?.src || '';
                 }
@@ -713,15 +892,56 @@ document.addEventListener('DOMContentLoaded', () => {
                     data.photo = document.getElementById('prov-photo-preview')?.querySelector('img')?.src || '';
                 }
                 
-                // Fallback ID generation if empty
-                if(!data.id) data.id = 'ID_' + Date.now();
-                
-                DB.saveItem(f.table, data.id, data);
-                notify("Registro salvo com sucesso!", "success");
-                switchModule(f.refresh);
+                try {
+                    if (f.table === 'clients') await ClientRepository.save(data.id, data);
+                    else if (f.table === 'projects') await ProjectRepository.save(data.id, data);
+                    else if (f.table === 'inventory') await InventoryRepository.save(data.id, data);
+                    else if (f.table === 'finance') await FinanceRepository.save(data.id, data);
+                    else if (f.table === 'providers') await ProviderRepository.save(data.id, data);
+                    
+                    notify("Registro salvo com sucesso!", "success");
+                    await switchModule(f.refresh);
+                } catch(err) {
+                    notify("Erro ao salvar: " + err.message, "danger");
+                }
             };
         }
     });
+
+    // Gallery Form submit handler
+    const galForm = document.getElementById('gallery-form-el');
+    if (galForm) {
+        galForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('gal-id')?.value;
+            const title = document.getElementById('gal-title')?.value;
+            const sub = document.getElementById('gal-sub')?.value;
+            const fileInput = document.getElementById('gal-file');
+            
+            let photo = '';
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                photo = await toBase64(fileInput.files[0]);
+            } else {
+                if (id) {
+                    const item = await GalleryRepository.getById(id);
+                    photo = item ? item.photo : '';
+                }
+            }
+            
+            if (!photo) {
+                notify("Por favor, envie uma imagem para publicar.", "danger");
+                return;
+            }
+
+            try {
+                await GalleryRepository.save(id, { title, sub, photo });
+                notify("Imagem publicada na galeria web com sucesso!", "success");
+                await switchModule('gallery');
+            } catch (err) {
+                notify("Erro ao publicar: " + err.message, "danger");
+            }
+        };
+    }
 
     const pF = document.getElementById('profile-form');
     if(pF) pF.onsubmit = (e) => saveProfile(e);
@@ -736,3 +956,16 @@ window.logout = () => {
     localStorage.removeItem('state_current_user');
     window.location.href='login.html'; 
 };
+
+window.openProjectDetail = openProjectDetail;
+window.openClientDetail = openClientDetail;
+window.deleteProjectFromDetail = deleteProjectFromDetail;
+window.editProjectFromDetail = editProjectFromDetail;
+window.deleteClientFromDetail = deleteClientFromDetail;
+window.editClientFromDetail = editClientFromDetail;
+window.editInventoryItem = editInventoryItem;
+window.toggleFinanceStatus = toggleFinanceStatus;
+window.openProviderDetail = openProviderDetail;
+window.deleteProviderFromDetail = deleteProviderFromDetail;
+window.editProviderFromDetail = editProviderFromDetail;
+window.deleteGalleryItem = deleteGalleryItem;

@@ -3,7 +3,6 @@
    ========================================================================== */
 
 /* --- Fonts & Import --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
 /* --- Design System Tokens (TechGear DNA) --- */
 :root {
@@ -56,6 +55,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+*:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 4px;
+    box-shadow: 0 0 10px rgba(0, 168, 255, 0.4);
 }
 
 html {
@@ -1853,7 +1858,10 @@ section {
 
 /* Lightbox Modal */
 .lightbox-modal {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.4s;
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
@@ -1868,7 +1876,8 @@ section {
 }
 
 .lightbox-modal.show {
-    display: flex;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .lightbox-content-wrapper {
@@ -1878,6 +1887,12 @@ section {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lightbox-modal.show .lightbox-content-wrapper {
+    transform: scale(1) translateY(0);
 }
 
 .lightbox-img {
@@ -1886,6 +1901,13 @@ section {
     border-radius: 12px;
     border: 1px solid var(--border);
     object-fit: contain;
+    cursor: zoom-in;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lightbox-img.zoomed {
+    transform: scale(1.35);
+    cursor: zoom-out;
 }
 
 .lightbox-caption {
