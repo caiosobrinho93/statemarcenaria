@@ -128,101 +128,67 @@
         </nav>
 
         <main>
-            <!-- Cinematic Split Hero Section -->
-            <section id="hero" class="hero-tech-gear">
-                <!-- Decorative Glows & Background Typography -->
-                <div class="hero-bg-text">STATE</div>
-                <div class="hero-glow-circle-1"></div>
-                <div class="hero-glow-circle-2"></div>
-                
-                <div class="container hero-container-split">
-                    <!-- Left Column (45%) -->
-                    <div class="hero-left-col reveal-left">
-                        <div class="hero-tech-badge">
+            <!-- New Hero Section with Full Width Background -->
+            <section id="hero" class="hero-new">
+                <div class="hero-bg-overlay"></div>
+                <div class="container">
+                    <div class="hero-content-new reveal-up">
+                        <div class="hero-badge">
                             <i class="fa-solid fa-pen-ruler"></i> EXCLUSIVIDADE
                         </div>
-                        <h1 class="hero-title-main">
-                            Móveis sob medida.<br>
-                            <span class="text-highlight-blue">Perfeição em cada detalhe.</span>
+                        <h1 class="hero-title-new">
+                            Transformamos seus ambientes com <span class="text-gradient">móveis planejados</span> de alta precisão
                         </h1>
-                        <p class="hero-desc-alt">
-                            Combinamos a precisão da engenharia com a elegância do design para criar ambientes únicos. Qualidade estrutural incomparável e garantia de satisfação absoluta.
+                        <p class="hero-desc-new">
+                            Design exclusivo, engenharia avançada e acabamento premium para projetos que superam expectativas.
                         </p>
-                        
-                        <div class="hero-actions-alt">
-                            <a href="#" class="btn-tech-primary open-modal-btn">
-                                SOLICITAR PROJETO
+                        <div class="hero-buttons">
+                            <a href="#" class="btn-primary-new open-modal-btn">
+                                SOLICITAR ORÇAMENTO <i class="fa-solid fa-arrow-right"></i>
                             </a>
-                            <a href="#projects" class="btn-tech-outline">
-                                VER PORTFÓLIO <i class="fa-solid fa-arrow-right"></i>
+                            <a href="#projects" class="btn-secondary-new">
+                                VER PORTFÓLIO
                             </a>
-                        </div>
-                        
-                        <div class="hero-stats-row">
-                            <div class="h-stat-box">
-                                <span class="h-stat-number">100%</span>
-                                <span class="h-stat-text">Personalizado</span>
-                            </div>
-                            <div class="h-stat-line-divider"></div>
-                            <div class="h-stat-box">
-                                <span class="h-stat-number">MDF</span>
-                                <span class="h-stat-text">Alta Densidade</span>
-                            </div>
-                            <div class="h-stat-line-divider"></div>
-                            <div class="h-stat-box">
-                                <span class="h-stat-number"><i class="fa-solid fa-shield-halved"></i></span>
-                                <span class="h-stat-text">Garantia Total</span>
-                            </div>
                         </div>
                     </div>
-
-                    <!-- Right Column (55%) -->
-                    <div class="hero-right-col reveal-right">
-                        <div class="hero-showcase-container">
-                            <!-- Background glow for depth -->
-                            <div class="hero-visual-glow"></div>
-                            
-                            <!-- Premium Floating Badges -->
-                            <div class="floating-badge fb-top-left">
-                                <div class="badge-icon"><i class="fa-solid fa-cube"></i></div>
-                                <div class="badge-content">
-                                    <span>PROJETO 3D</span>
-                                    <small>Detalhamento Realista</small>
-                                </div>
+                    
+                    <!-- Cards Overlay -->
+                    <div class="hero-cards-overlay">
+                        <div class="hero-card reveal-up" style="transition-delay: 0.1s;">
+                            <div class="hero-card-icon">
+                                <i class="fa-solid fa-cube"></i>
                             </div>
-                            <div class="floating-badge fb-bottom-right">
-                                <div class="badge-icon"><i class="fa-solid fa-gem"></i></div>
-                                <div class="badge-content">
-                                    <span>MDF PREMIUM</span>
-                                    <small>Acabamento de Luxo</small>
-                                </div>
+                            <div class="hero-card-content">
+                                <h4>Projeto 3D</h4>
+                                <p>Visualização realista antes de fabricar</p>
                             </div>
-                            
-                             <!-- Animated Slider Frame -->
-                            <div class="hero-image-frame-tech">
-                                <div class="hero-slider-split">
-                                    <div class="slide-split slide-1"></div>
-                                    <div class="slide-split slide-2"></div>
-                                    <div class="slide-split slide-3"></div>
-                                </div>
-                                <div class="frame-scanline"></div>
-                                <div class="frame-corners">
-                                    <span class="corner c-tl"></span>
-                                    <span class="corner c-tr"></span>
-                                    <span class="corner c-bl"></span>
-                                    <span class="corner c-br"></span>
-                                </div>
-                                <div class="frame-bottom-vignette"></div>
-                                <!-- Slide Progress Bar -->
-                                <div class="hero-slide-progress">
-                                    <div class="progress-bar-fill"></div>
-                                </div>
+                        </div>
+                        <div class="hero-card reveal-up" style="transition-delay: 0.2s;">
+                            <div class="hero-card-icon">
+                                <i class="fa-solid fa-gem"></i>
+                            </div>
+                            <div class="hero-card-content">
+                                <h4>MDF Premium</h4>
+                                <p>Acabamento de luxo e durabilidade</p>
+                            </div>
+                        </div>
+                        <div class="hero-card reveal-up" style="transition-delay: 0.3s;">
+                            <div class="hero-card-icon">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div class="hero-card-content">
+                                <h4>Garantia Total</h4>
+                                <p>Qualidade garantida em cada detalhe</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="hero-bottom-gradient"></div>
+                <div class="hero-scroll-indicator">
+                    <a href="#ambientes">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                </div>
             </section>
 
             
@@ -383,146 +349,6 @@
                 </div>
             </section>
 
-            <!-- Systems / Services Section -->
-            <section id="systems" class="section-services-tech">
-                <div class="container">
-                    <div class="section-title-center reveal-up">
-                        <span class="section-subtitle-tech">NOSSO ESCOPO</span>
-                        <h2 class="section-title-tech">ESTILO 'STATE'</h2>
-                    </div>
-
-                    <div class="services-grid-2x2">
-                        <div class="service-card reveal-up">
-                            <div class="service-card-icon-container">
-                                <i class="fa-solid fa-house service-icon-tech"></i>
-                            </div>
-                            <div class="service-card-body">
-                                <h3 class="service-card-title">Casa</h3>
-                                <p class="service-card-desc">Armários de cozinha, banheiros, closets, painéis de TV, home theaters e soluções residenciais completas e personalizadas.</p>
-                            </div>
-                            <div class="service-card-action">
-                                <a href="#" class="service-btn open-modal-btn">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="service-card reveal-up" style="transition-delay: 0.1s;">
-                            <div class="service-card-icon-container">
-                                <i class="fa-solid fa-briefcase service-icon-tech"></i>
-                            </div>
-                            <div class="service-card-body">
-                                <h3 class="service-card-title">Empresarial</h3>
-                                <p class="service-card-desc">Ambientes de trabalho projetados sob medida para aliar produtividade, ergonomia e o posicionamento estético da sua marca.</p>
-                            </div>
-                            <div class="service-card-action">
-                                <a href="#" class="service-btn open-modal-btn">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="service-card reveal-up" style="transition-delay: 0.2s;">
-                            <div class="service-card-icon-container">
-                                <i class="fa-solid fa-boxes-stacked service-icon-tech"></i>
-                            </div>
-                            <div class="service-card-body">
-                                <h3 class="service-card-title">Projetos em Lote</h3>
-                                <p class="service-card-desc">Capacidade industrial otimizada para incorporadoras: fabricação de móveis planejados em escala com controle rigoroso de qualidade.</p>
-                            </div>
-                            <div class="service-card-action">
-                                <a href="#" class="service-btn open-modal-btn">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="service-card reveal-up" style="transition-delay: 0.3s;">
-                            <div class="service-card-icon-container">
-                                <i class="fa-solid fa-cubes service-icon-tech"></i>
-                            </div>
-                            <div class="service-card-body">
-                                <h3 class="service-card-title">Engenharia 3D</h3>
-                                <p class="service-card-desc">Detalhamento técnico milimétrico com modelagem tridimensional avançada, garantindo previsibilidade absoluta antes da fabricação.</p>
-                            </div>
-                            <div class="service-card-action">
-                                <a href="#" class="service-btn open-modal-btn">
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="services-actions reveal-up">
-                        <a href="#" class="btn-tech-primary open-modal-btn">SOLICITAR ORÇAMENTO</a>
-                        <a href="#projects" class="btn-tech-outline">VER PORTFÓLIO <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Materials Section -->
-            <section id="materials" class="section-materials">
-                <div class="container">
-                    <div class="section-title-center reveal-up">
-                        <span class="section-subtitle-tech">QUALIDADE E PRECISÃO</span>
-                        <h2 class="section-title-tech">MATERIAIS E ACABAMENTOS</h2>
-                    </div>
-
-                    <div class="materials-flex">
-                        <div class="material-block reveal-left">
-                            
-                            
-                            
-                            <h4>MDF de Alta Densidade</h4>
-                            <p>Chapas de alta resistência revestidas com texturas sofisticadas, perfeitas para projetos contínuos, garantindo estética elegante e excepcional durabilidade ao longo dos anos.</p>
-                        </div>
-                        <div class="material-block reveal-up" style="transition-delay: 0.1s;">
-                            
-                            
-                            
-                            <h4>Acabamento Impecável</h4>
-                            <p>Cortes precisos, fitagem perfeita e refilamento cirúrgico de alto nível. Um acabamento insuperável que protege a placa e reflete a exclusividade de cada espaço e mobiliário.</p>
-                        </div>
-                        <div class="material-block reveal-right" style="transition-delay: 0.2s;">
-                            
-                            
-                            
-                            <h4>Ferragens de Alta Durabilidade</h4>
-                            <p>Utilizamos os melhores sistemas de amortecimento e articulação do mercado. Conferem uso diário extremamente suave, garantindo vida útil inigualável e máximo valor ao produto.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Why Custom Section -->
-            <section id="why-custom" class="section-why-custom">
-                <div class="container">
-                    <div class="section-title-center reveal-up">
-                        <span class="section-subtitle-tech">POR QUE SOB MEDIDA?</span>
-                        <h2 class="section-title-tech">A QUALIDADE DO MDF</h2>
-                    </div>
-
-                    <div class="why-custom-grid">
-                        <div class="reason-card reveal-up">
-                            <i class="fa-solid fa-shield-halved reason-icon"></i>
-                            <h4>Máxima Resistência</h4>
-                            <p>O MDF é o material mais robusto e versátil para móveis de primeira linha. Contamos inclusive com variações resistentes à umidade e ao fogo, de acordo com o ambiente.</p>
-                        </div>
-                        <div class="reason-image-card reveal-up" style="transition-delay: 0.1s;">
-                             <img src="imgs/premium_closet.png" alt="Design Único e Medida Exata">
-                             <div class="reason-overlay">
-                                 <h4>Design Único e Exato</h4>
-                                 <p>Aproveitamento total do espaço, projetado exatamente como o cliente deseja, garantindo funcionalidade sem desperdícios.</p>
-                             </div>
-                        </div>
-                        <div class="reason-card reveal-up" style="transition-delay: 0.2s;">
-                            <i class="fa-solid fa-gem reason-icon"></i>
-                            <h4>Material Premium e Suporte</h4>
-                            <p>Além da durabilidade estrutural incrível do MDF, nossa marcenaria fornece suporte técnico completo do projeto inicial até a manutenção da instalação.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <!-- Projects Section -->
             <section id="projects" class="section-projects">
