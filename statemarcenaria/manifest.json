@@ -1,0 +1,16 @@
+{
+  "name": "State Marcenaria",
+  "short_name": "State",
+  "description": "Móveis planejados de alta qualidade",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8B4513",
+  "icons": [
+    {
+      "src": "imgs/logo-state.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
